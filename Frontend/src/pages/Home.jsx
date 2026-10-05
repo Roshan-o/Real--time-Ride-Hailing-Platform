@@ -235,12 +235,20 @@ const Home = () => {
           src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
           alt="Uber"
         />
-        <Link
-          to="/user/logout"
-          className="h-10 w-10 rounded-full bg-white/70 backdrop-blur-sm shadow-lg flex items-center justify-center hover:bg-white/90 transition"
-        >
-          <i className="ri-logout-circle-line text-gray-700 text-xl"></i>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/profile"
+            className="h-10 w-10 rounded-full bg-white/70 backdrop-blur-sm shadow-lg flex items-center justify-center hover:bg-white/90 transition"
+          >
+            <i className="ri-user-line text-gray-700 text-xl"></i>
+          </Link>
+          <Link
+            to="/user/logout"
+            className="h-10 w-10 rounded-full bg-white/70 backdrop-blur-sm shadow-lg flex items-center justify-center hover:bg-white/90 transition"
+          >
+            <i className="ri-logout-circle-line text-gray-700 text-xl"></i>
+          </Link>
+        </div>
       </header>
 
       {/* <div className="h-screen w-screen relative">

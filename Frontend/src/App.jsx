@@ -11,6 +11,7 @@ import Home from './pages/Home.jsx';
 // import { usecontext } from 'react';
 import Userprotectedwrapper from './pages/userprotectedwrapper.jsx';
 import UserLogout from './pages/UserLogout.jsx';
+import UserProfile from './pages/UserProfile.jsx';
 import Captainhome from './pages/Captainhome.jsx';
 import Captainprotectedwrapper from './pages/Captainprotectedwrapper.jsx';
 import { useContext } from 'react';
@@ -36,6 +37,9 @@ function App() {
           } />
           <Route path='/user/logout' element={<Userprotectedwrapper>
             <UserLogout />
+          </Userprotectedwrapper>} />
+          <Route path='/profile' element={<Userprotectedwrapper>
+            <UserProfile />
           </Userprotectedwrapper>} />
         <Route path="/captain-home" element={
           <Captainprotectedwrapper>
