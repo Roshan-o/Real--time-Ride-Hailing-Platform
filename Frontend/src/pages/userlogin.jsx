@@ -9,27 +9,33 @@ const UserLogin = () => {
   const [password,setpassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [userdata,setuserdata] = React.useState({});
+  const [error, setError] = React.useState("");
   const {user,setUser}=useContext(UserDataContext);
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setError("");
     const userdata={
       email:email,
       password:password
     }
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userdata);
-    console.log(response);
-    if(response.status===200){
-      console.log("Login Success:", response.data);
-      const data=response.data;
-      setUser(data.user);
-      localStorage.setItem("token", data.token);
-      navigate('/home');
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userdata);
+      console.log(response);
+      if(response.status===200){
+        console.log("Login Success:", response.data);
+        const data=response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate('/home');
+      }
+      setemail("");
+      setpassword("");
+    } catch (err) {
+      const msg = err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || "Something went wrong. Please try again.";
+      setError(msg);
     }
-    // console.log(userdata);
-    setemail("");
-    setpassword("");
   }
 
 
@@ -58,6 +64,7 @@ const UserLogin = () => {
             </button>
           </div>
           
+          {error && <p className='text-red-500 text-sm mt-3 text-center'>{error}</p>}
 
           <button className='text-white mt-7 bg-[#111] font-semibold mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'>
             Login</button>

@@ -10,28 +10,33 @@ const Captainlogin = () => {
     const [password,setpassword] = React.useState("");
     const [showPassword, setShowPassword] = React.useState(false);
     const [captaindata,setcaptaindata] = React.useState({});
+    const [error, setError] = React.useState("");
     const navigate=useNavigate();
   
     const submitHandler = async (e) => {
       e.preventDefault();
+      setError("");
       const captaindata={
         email:email,
         password:password
       }
-      
-      // console.log(captaindata);
-      const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captaindata);
-      console.log(response);
-      if(response.status===200){
-        const data=response.data;
-        console.log("Login Success:", data);
-        setcaptaindata(data.captain);
-        localStorage.setItem("captainToken", data.token);
-        console.log("Captain data:", data.captain);
-        navigate('/captain-home');
+      try {
+        const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captaindata);
+        console.log(response);
+        if(response.status===200){
+          const data=response.data;
+          console.log("Login Success:", data);
+          setcaptaindata(data.captain);
+          localStorage.setItem("captainToken", data.token);
+          console.log("Captain data:", data.captain);
+          navigate('/captain-home');
+        }
+        setemail("");
+        setpassword("");
+      } catch (err) {
+        const msg = err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || "Something went wrong. Please try again.";
+        setError(msg);
       }
-      setemail("");
-      setpassword("");
     }
 
   
@@ -60,6 +65,7 @@ const Captainlogin = () => {
             </button>
           </div>
           
+          {error && <p className='text-red-500 text-sm mt-3 text-center'>{error}</p>}
 
           <button className='text-white mt-7 bg-[#111] font-semibold mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'>
             Login</button>

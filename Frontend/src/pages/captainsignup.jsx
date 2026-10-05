@@ -17,9 +17,11 @@ const captainsignup = () => {
     const [plate, setvehicleplate] = React.useState("");
     const [vehicleType, setvehiclevehicleType] = React.useState("");
     const [capacity, setvehiclecapacity] = React.useState("");
+    const [error, setError] = React.useState("");
     const navigate=useNavigate();
     const submitHandler = async (e) => {
       e.preventDefault();
+      setError("");
       const captaindata={
       email: email,
       password: password,
@@ -35,26 +37,28 @@ const captainsignup = () => {
       }
       };
       
-      // console.log(captaindata);
-      const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captaindata);
-     
-      console.log(response);
-      if(response.status===201){
-        const data=response.data;
-        console.log("Registration Success:", data);
-        setCaptain(data.captain);
-        localStorage.setItem("captainToken", data.token);
-        navigate('/captain-home');
+      try {
+        const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captaindata);
+        console.log(response);
+        if(response.status===201){
+          const data=response.data;
+          console.log("Registration Success:", data);
+          setCaptain(data.captain);
+          localStorage.setItem("captainToken", data.token);
+          navigate('/captain-home');
+        }
+        setemail("");
+        setpassword("");
+        setfirstname("");
+        setlastname("");
+        setvehiclecolor("");
+        setvehicleplate("");
+        setvehiclevehicleType("");
+        setvehiclecapacity("");
+      } catch (err) {
+        const msg = err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || "Something went wrong. Please try again.";
+        setError(msg);
       }
-      // Reset all fields
-      setemail("");
-      setpassword("");
-      setfirstname("");
-      setlastname("");
-      setvehiclecolor("");
-      setvehicleplate("");
-      setvehiclevehicleType("");
-      setvehiclecapacity("");
     }
 
     useEffect(()=>{
@@ -115,6 +119,8 @@ const captainsignup = () => {
             }} type="number" placeholder='Vehicle Capacity' className='bg-[#eeeeee] rounded px-4 py-2 border w-full text-base placeholder:text-sm' />
             </div>
 
+
+          {error && <p className='text-red-500 text-sm mt-3 text-center'>{error}</p>}
 
           <div className='flex justify-center '>
             <button className='flex  justify-around max-w-lg text-white mt-7 bg-[#111] font-semibold mb-5 rounded-lg px-4 py-2 border w-full text-base placeholder:text-sm'>
